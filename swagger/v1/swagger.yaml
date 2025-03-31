@@ -1,0 +1,192 @@
+---
+openapi: 3.0.1
+info:
+  title: ToDo API
+  version: v1
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- bearerAuth: []
+paths:
+  "/api/v1/todos":
+    post:
+      summary: create todo
+      tags:
+      - Todos
+      security:
+      - bearerAuth: []
+      parameters: []
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  status:
+                    type: string
+                  due_date:
+                    type: string
+                    format: date
+                  user_id:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: date_time
+                  updated_at:
+                    type: string
+                    format: date_time
+                required:
+                - id
+                - title
+                - description
+                - status
+                - due_date
+                - user_id
+                - created_at
+                - updated_at
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                todo:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    description:
+                      type: string
+                    status:
+                      type: string
+                    due_date:
+                      type: string
+                      format: date
+                  required:
+                  - title
+                  - description
+                  - status
+                  - due_date
+              required:
+              - todo
+    get:
+      summary: list todos
+      tags:
+      - Todos
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: due_date_from
+        in: query
+        format: date
+        required: false
+        schema:
+          type: string
+      - name: due_date_to
+        in: query
+        format: date
+        required: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    title:
+                      type: string
+                    description:
+                      type: string
+                    status:
+                      type: string
+                    due_date:
+                      type: string
+                      format: date
+                    user_id:
+                      type: integer
+                    created_at:
+                      type: string
+                      format: date_time
+                    updated_at:
+                      type: string
+                      format: date_time
+  "/api/v1/todos/{id}":
+    put:
+      summary: update todo
+      tags:
+      - Todos
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: updated
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                status:
+                  type: string
+                due_date:
+                  type: string
+                  format: date
+    delete:
+      summary: delete todo
+      tags:
+      - Todos
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: deleted
